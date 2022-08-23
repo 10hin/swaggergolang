@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  description: ""
+  title: swaggerspringboot
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+paths:
+  /users/{userId}:
+    get:
+      description: Retrieve the information of the user with the matching user ID.
+      operationId: get-users-userId
+      parameters:
+      - description: Id of an existing user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Get User Alice Smith:
+                  value:
+                    id: 142
+                    firstName: Alice
+                    lastName: Smith
+                    email: alice.smith@gmail.com
+                    dateOfBirth: 1997-10-31
+                    emailVerified: true
+                    signUpDate: 2019-08-24
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User Found
+        "404":
+          description: User Not Found
+      summary: Get User Info by User ID
+      tags: []
+    patch:
+      description: Update the information of an existing user.
+      operationId: patch-users-userId
+      parameters:
+      - description: Id of an existing user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Update First Name:
+                value:
+                  firstName: Rebecca
+              Update Email:
+                value:
+                  email: rebecca@gmail.com
+              Update Last Name & Date of Birth:
+                value:
+                  lastName: Baker
+                  dateOfBirth: 1985-10-02
+            schema:
+              $ref: '#/components/schemas/UserPatch'
+        description: Patch user properties to update.
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                Updated User Rebecca Baker:
+                  value:
+                    id: 13
+                    firstName: Rebecca
+                    lastName: Baker
+                    email: rebecca@gmail.com
+                    dateOfBirth: 1985-10-02
+                    emailVerified: false
+                    createDate: 2019-08-24
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User Updated
+        "404":
+          description: User Not Found
+        "409":
+          description: Email Already Taken
+      summary: Update User Information
+  /user:
+    post:
+      description: Create a new user.
+      operationId: post-user
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create User Bob Fellow:
+                value:
+                  firstName: Bob
+                  lastName: Fellow
+                  email: bob.fellow@gmail.com
+                  dateOfBirth: 1996-08-24
+            schema:
+              $ref: '#/components/schemas/UserDraft'
+        description: Post the necessary fields for the API to create a new user.
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: 1996-08-24
+                    emailVerified: false
+                    createDate: 2020-11-18
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User Created
+        "400":
+          description: Missing Required Information
+        "409":
+          description: Email Already Taken
+      summary: Create New User
+components:
+  requestBodies: {}
+  schemas:
+    User:
+      description: ""
+      example:
+        firstName: firstName
+        lastName: lastName
+        id: 0
+        email: email
+      properties:
+        id:
+          description: Unique identifier for the given user.
+          readOnly: true
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          format: email
+          type: string
+      required:
+      - email
+      - firstName
+      - id
+      - lastName
+      title: User
+      type: object
+    UserPatch:
+      example:
+        firstName: firstName
+        lastName: lastName
+        email: email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+      title: UserPatch
+      type: object
+      x-stoplight:
+        id: c3wxlc50syd8e
+    UserDraft:
+      example:
+        firstName: firstName
+        lastName: lastName
+        email: email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+      required:
+      - email
+      - firstName
+      - lastName
+      title: UserDraft
+      type: object
+      x-stoplight:
+        id: 5urw5kee7jytc
+x-stoplight:
+  id: g2g3hq3q6s4sn
